@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vt-webapp-v1
+  labels:
+    app: webapp-v1
+  namespace: app-with-injection
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: webapp-v1
+  template:
+    metadata:
+      labels:
+        app: webapp-v1
+    spec:
+      containers:
+      - name: webapp-v1
+        image: virtualthoughts/vt-webapp:1.0
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vt-webapp-v1
+  namespace : app-with-injection
+spec:
+  selector:
+    app: webapp-v1
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vt-webapp-v2
+  labels:
+    app: webapp-v2
+  namespace: app-with-injection
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: webapp-v2
+  template:
+    metadata:
+      labels:
+        app: webapp-v2
+    spec:
+      containers:
+      - name: webapp-v2
+        image: virtualthoughts/vt-webapp:2.0
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vt-webapp-v2
+  namespace : app-with-injection
+spec:
+  selector:
+    app: webapp-v2
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
